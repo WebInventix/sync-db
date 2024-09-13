@@ -1,0 +1,72 @@
+block vars
+doctype html
+html(lang="en")
+	head
+		meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no")
+		meta(name="description", content="Representing the finest music from emerging unsigned, independent creators. We supply affordable, quality tracks for use in your film, video and new media.")
+		meta(name="theme-color", content="#53B7EA")
+		title Sync-Audio | Music licensing for the digital age
+		link(rel="stylesheet", type="text/css", href="/css/style.css")
+		link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css")
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+		include jquery.pug
+		script.
+			$(function(){
+				if (sessionStorage.acceptCookies) {
+					$("div.cookieNotice").hide();
+				}
+				$("a.okCookie").on("click", function(){
+					sessionStorage.setItem("acceptCookies", true);
+					$("div.cookieNotice").hide();
+				});
+			});
+		script.
+			var licences = !{JSON.stringify(licences)};
+		block scripts
+	body
+		#container
+			.cookieNotice(style="background-color: rgb(0, 150, 228); padding: 15px;")
+				.notice
+					h3(style="font-size: 16px; font-weight:lighter") This website uses cookies
+					p(style="font-size: 14px;")
+						| Sync-Audio uses cookies set by Google Analytics for the purpose of analysing our website traffic. Google Analytics is anonymous and does not track any personal information. Sync-Audio uses Paypal to facilitate account login. If you licence a track on Sync-Audio or submit music to Sync-Audio we will store a cookie with Paypal access token. For more information see our
+						| 
+						a(href="/privacy_policy") privacy policy
+				.action
+					a.okCookie(href="javascript:void(0)" style="font-size: 16px; font-weight:bold") Dismiss
+
+			block header
+				header
+					a.logo(href="/")
+						img(src="/images/logo-tailwind.png", alt="Sync-Audio", style="height:30px")
+					ul.menu.left-menu
+						li.music
+						a(href="/music" class=(active === '/music' ? 'active' : '')) Music
+						li.about
+						a(href="/about" class=(active === '/about' ? 'active' : '')) About
+						if shortlists && shortlists.length > 0
+							li.shortlists 
+								a(href="/shortlist" class=(active === '/shortlists' ? 'active' : '')) Shortlists
+						li.playlists
+							a(href="/playlists" class=(active === '/playlists' ? 'active' : '')) Playlists
+					ul.menu.right-menu
+						if trolley && trolley.tracks && trolley.tracks.length > 0
+							li.trolley
+								a(href="/trolley")
+									img(src="/images/trolley.png", alt="Trolley Image", style="vertical-align: middle")
+									| #{trolley.tracks.length}
+						else
+							li.trolley
+								a(href="/trolley")
+								img(src="/images/trolley.png", alt="Trolley Image", style="vertical-align: middle")
+								|   0
+						if paypalAccessToken
+							li.account
+								a(href="/account") Account
+						else
+							li.login
+								a(href="/account") Log in
+			block top
+			#content(class=applyNoContentStyles ? '' : 'default-content')
+				block content
+			include footer.pug

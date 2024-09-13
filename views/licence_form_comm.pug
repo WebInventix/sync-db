@@ -1,0 +1,221 @@
+extends layout.pug
+
+block vars
+    - var applyNoContentStyles = true
+
+block scripts
+    script.
+        $(document).ready(function() {
+            $("#categoryFormModal").hide();
+            $("#contactModal").hide();
+
+            function disableSubmitButton() {
+                $("#form input[type='submit']").prop('disabled', true).css({
+                    "background-color": "rgba(0, 164, 228, 0.3)", // Light blue color when disabled
+                    "cursor": "not-allowed"
+                });
+            }
+
+            function enableSubmitButton() {
+                $("#form input[type='submit']").prop('disabled', false).css({
+                    "background-color": "rgba(0, 150, 228)", // Original color when enabled
+                    "cursor": "pointer"
+                });
+            }
+
+            function validateForm() {
+                var isValid = true;
+
+                // Reset error messages
+                $(".error-message").hide();
+
+                // Validate required fields
+                $("#form input[type='text'], #form input[type='email']").each(function() {
+                    var id = $(this).attr('id');
+
+                    // Skip validation for the Company field
+                    if (id === 'company') {
+                        return;
+                    }
+
+                    if ($(this).val().trim() === '') {
+                        isValid = false;
+                        if ($(this).data('touched')) {
+                            $("#" + id + "Error").text("This field is required.").show();
+                        }
+                    } else {
+                        $("#" + id + "Error").hide();
+                    }
+                });
+
+                // Validate Company field separately
+                var companyField = $("#form input#company");
+                if (companyField.data('touched') && companyField.val().trim() === '') {
+                    $("#" + companyField.attr('id') + "Error").hide(); // Ensure no error is shown for Company field if empty
+                }
+
+                // Validate email
+                var email = $("#form input[name='email']").val();
+                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (email && !emailPattern.test(email)) {
+                    isValid = false;
+                    if ($("#email").data('touched')) {
+                        $("#emailError").text("Please enter a valid email address.").show();
+                    }
+                }
+
+                // Validate website
+                var website = $("#form input[name='website']").val();
+                var websitePattern = /^(http[s]?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}$/;
+                if (website && !websitePattern.test(website)) {
+                    isValid = false;
+                    if ($("#website").data('touched')) {
+                        $("#websiteError").text("Please enter a valid website URL.").show();
+                    }
+                }
+
+                // Enable or disable submit button based on validity
+                if (isValid) {
+                    enableSubmitButton();
+                } else {
+                    disableSubmitButton();
+                }
+            }
+
+
+           function initialCheck() {
+                var allFilled = true;
+
+                // Check all text, email, and website fields except the company field
+                $("#form input[type='text'], #form input[type='email'], #form input[name='website']").each(function() {
+                    if ($(this).attr('id') !== 'company' && $(this).val().trim() === '') {
+                        allFilled = false;
+                    }
+                });
+
+                if (allFilled) {
+                    validateForm(); // Validate form fields
+                } else {
+                    disableSubmitButton(); // Disable the button if not all required fields are filled
+                }
+            }
+
+            // Event handlers for form validation and submit button state
+            $("#form input").on("focus blur input", function() {
+                $(this).data('touched', true); // Mark field as interacted
+                validateForm(); // Validate form on focus, blur, and input
+            });
+
+            $("#form").on("submit", function(event) {
+                validateForm(); // Validate form on submit
+                if ($("#form input[type='submit']").prop('disabled')) {
+                    event.preventDefault(); // Prevent form submission if invalid
+                }
+            });
+
+            $("input[name='licenceCategory']").on("click", function() {
+                $("#categoryFormModal").hide();
+                $("#contactModal").hide();
+                var selectedCategory = $(this).val();
+                if (selectedCategory == "other") {
+                    $("#contactModal").show();
+                } else {
+                    $("#categoryFormModal").show();
+                    $("#form input[name='licenceCategory']").val(selectedCategory);
+                    initialCheck(); // Revalidate form when modal opens
+                }
+            });
+
+            $(".modal .close").on("click", function() {
+                $(".modal").hide();
+                initialCheck(); // Revalidate form when modal closes
+            });
+
+            $(window).on("click", function(event) {
+                if ($(event.target).hasClass("modal")) {
+                    $(".modal").hide();
+                    initialCheck(); // Revalidate form when modal closes
+                }
+            });
+
+            // Initially check all fields and disable/enable the submit button
+            initialCheck();
+        });
+
+block content
+    div(style="margin-bottom:100px; margin-top:70px; margin-left:400px; margin-right:400px")
+        if licenceCategories
+            .entry
+                p(style="font-size:18px; color:rgb(71, 85, 105)")
+                    label(for="licenceCategory") Project type
+                div(style="margin-top:30px").categories
+                    for category in licenceCategories
+                        div
+                            div(style="margin-top:15px")
+                                if licenceCategory && licenceCategory == category.id
+                                    input(type="radio", name="licenceCategory", value=category.id, checked="checked")
+                                else
+                                    input(type="radio", name="licenceCategory", value=category.id)
+                                | 
+                                span(style="font-size:15px; font-weight:600;margin-left:10px; color:rgb(60, 70, 90);")= category.name
+                            div(style="margin-left:35px; color:gray; font-size:14px")= category.description
+                    div
+                        div
+                            input(type="radio", name="licenceCategory", value="other")
+                            | 
+                            span(style="font-size:15px; font-weight:bold; margin-left:10px;color:rgb(71, 85, 105)") Other
+                        div(style="margin-left:35px; color:gray; font-size:14px") We can tailor a licence to your needs.
+
+    .modal#categoryFormModal
+        .modal-content1
+            .close x
+            .form-container
+                form#form(action="/trolley/add/"+trackId+"/commercial", method="post")
+                    .entry
+                        div(style="font-size:14px")
+                            label(for="firstName") First name
+                        div(style="font-size:15px")
+                            input#firstName(style="font-size:14px", type="text", name="firstName", placeholder="First name", value=firstName)
+                            span.error-message#firstNameError(style="color: red; display: none;font-size:14px") Please enter your first name.
+                    .entry
+                        div(style="font-size:14px")
+                            label(for="lastName") Last name
+                        div(style="font-size:14px")
+                            input#lastName(style="font-size:14px", type="text", name="lastName", placeholder="Last name", value=lastName)
+                            span.error-message#lastNameError(style="color: red; display: none;font-size:14px") Please enter your last name.
+                    .entry
+                        div(style="font-size:14px")
+                            label(for="company") Company (Optional)
+                        div
+                            input#company(style="font-size:14px", type="text", name="company", placeholder="Company Name", value=company)
+                    .entry
+                        div(style="font-size:14px")
+                            label(for="email") Email
+                        div
+                            input#email(style="font-size:14px", type="email", name="email", placeholder="name@company.com", value=email)
+                            span.error-message#emailError(style="color: red; display: none;font-size:14px") Please enter a valid email address.
+                    //- .entry
+                    //-     div(style="font-size:14px")
+                    //-         label(for="website") Website
+                    //-     div
+                    //-         input#website(style="font-size:14px", type="text", name="website", placeholder="www.mywebsite.com", value=website)
+                    //-         span.error-message#websiteError(style="color: red; display: none;font-size:14px") Please enter a valid website URL.
+                    //- .entry
+                    //-     div(style="font-size:14px")
+                    //-         label(for="projectTitle") Project title
+                    //-     div
+                    //-         input#projectTitle(style="font-size:14px", type="text", name="projectTitle", placeholder="e.g. Big Bus", value=projectTitle)
+                    //-         span.error-message#projectTitleError(style="color: red; display: none;font-size:14px") Please enter the project title.
+                    input(type="hidden", name="licenceCategory", value="")
+                    .entry(style="display:flex; align-items:center; justify-content:center;")
+                        div
+                            input#submit(type="submit", value="Submit", disabled="disabled")
+
+
+    .modal#contactModal(style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);")
+        .modal-content1(style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 8px;")
+            span.close(style="cursor: pointer; font-size: 20px;") × 
+            p(style="margin-top: 10px; font-size: 16px; text-align:center")
+                | Please
+                | 
+                a(href="mailto:info@sync-audio.com" style="color: #007BFF; text-decoration: none; font-size: 16px;") contact Sync-Audio

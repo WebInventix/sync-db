@@ -1,0 +1,52 @@
+extends layout.pug
+
+block vars
+    - var applyNoContentStyles = true
+block top
+    #intro_video
+        div 
+            video(playsinline="", autoplay="", muted="", loop="", poster="/images/intro_video.jpg")
+                //- source(src="/video/intro_video.mp4")
+            .overlay
+                div(style="background-color:transparent").center-container
+                    h1(style="font-size:60px;letter-spacing:-1.5px; background-color: transparent;") Music Licensing for
+                    h1(style="font-size:58px;margin-top:-35px;letter-spacing:-1.5px;font-family: 'Inter';") New Media, Video And Film
+                    p(style="color:white; font-size:20px;") Representing real unsigned independent artists, musicians, composers, poets and bands
+                div(style="background-color:transparent").center-container
+                    a(style="font-size:16px;font-family: 'Inter';").button-main(href="/music") Browse Music
+    #features
+        h6(style="text-align: center; font-size: 16px; font-weight:30px; margin-top:55px; color: rgb(0,150,228) ; margin-bottom:15px") Music reach like never before
+        //- rgb(37 99 235)
+        h1 Everything you need to deploy your music
+        ul
+            li
+                h4(style="margin-bottom:20px")
+                    i.bi.bi-music-note Tell your story
+                p Tell your story with real artists. Discover fresh original songs from independent creators for your story today!
+            li
+                h4(style="margin-bottom:20px")  
+                    i.bi.bi-globe-europe-africa  Music Licensing 
+                p Music licensing for videos films and new media. We have pricing options for your working projects
+            li
+                h4(style="margin-bottom:20px") 
+                    i.bi.bi-stars Multiple Platforms
+                p Licensing music for multiple platforms. From YouTube, filmmakers to traditional broadcasting use, our music on any platform forever – everywhere
+block content
+    div(style="display: flex; justify-content: space-between; align-items: center; margin-left:100px; margin-top:100px")
+        h1 Hear the Differnce
+        a(href="/playlists" style="text-decoration: none; color: gray; margin-right:100px; font-size:16px; margin-top:-2px") View all playlists
+    include playlist.pug
+    include featured_artists.pug
+        div(style="background-color: rgb(243 244 246);")
+            h3(style="text-align: center; color:black; margin-bottom:50px; padding-top:70px; margin-top:100px") Trusted by several companies using our music
+            div.clients
+                div
+                    img.company-img(src="/images/company_logos/bbc-logo.png", alt="Client 1")
+                div
+                    img.company-img(src="/images/company_logos/apple-logo.png", alt="Client 2")
+                div
+                    img.company-img(src="/images/company_logos/mobo-logo.png", alt="Client 3")
+                div
+                    img.company-img(src="/images/company_logos/mtv-logo.png", alt="Client 4")
+                div
+                    img.company-img(src="/images/company_logos/cancer-gray-logo.png", alt="Client 4")

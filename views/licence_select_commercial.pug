@@ -1,0 +1,77 @@
+extends layout.pug
+
+block vars
+    - var applyNoContentStyles = true
+    - var showCartOptions = typeof trackId !== 'undefined' && trackId !== null && trackId !== 'undefined'
+
+block scripts
+    script(type="text/javascript").
+        $(document).ready(function(){
+            function updateButtonState() {
+                var isRadioSelected = $("input[name='licenceId']:checked").length > 0;
+                var isCheckboxChecked = $("input[name='agree']").is(":checked");
+
+                if (isRadioSelected && isCheckboxChecked) {
+                    $("input[type='submit']").removeAttr("disabled").removeClass("disabled-btn").addClass("enabled-btn");
+                } else {
+                    $("input[type='submit']").attr("disabled", "disabled").removeClass("enabled-btn").addClass("disabled-btn");
+                }
+
+                if (isRadioSelected) {
+                    $("#tnclink").attr("href", "/trolley/com_licence_tnc/" + $("input[name='licenceId']:checked").val());
+                }
+            }
+
+            $("input[name='licenceId'], input[name='agree']").on("change", updateButtonState);
+        });
+
+block content
+    div(style="margin:150px; margin-top:50px")
+        p(style="font-size:20px") Purchase Options
+        h3(style="line-height:10px;margin-top:0px;font-size:16px")= licences[0].name
+        if licences[0].description
+            p(style="color:gray;font-size:14px")= licences[0].description
+        form(action="/trolley/add/"+trackId+"/commercial", method="post")
+            for val, key in form
+                input(type="hidden", name=key, value=val)
+            
+            table.licence
+                thead
+                    tr
+                        td
+                        td(style="padding: 1px 10px;padding-left:10px")
+                            h3 Use
+                        td(style="padding: 1px 10px; text-align:center") 
+                            h3 Territory
+                        td(style="padding: 1px 10px;text-align:center") 
+                            h3 Price
+                tbody
+                    for licence in licences
+                        tr(style="height: 10px;")
+                            if licence.price
+                                td
+                                    if showCartOptions
+                                        input(type="radio", name="licenceId", value=licence.id)
+                                td(style="padding: 5px 10px; padding-top:-20px; padding-left:10px; color:rgb(71, 85, 105); font-size:15px;")= licence.use
+                                td(style="padding: 5px 10px; text-align:center;font-size:15px;").territory= licence.territory
+                                td(style="padding: 5px 10px; text-align:center; font-size:15px;color:rgb(71, 85, 105)").nowrap
+                                    p(style="font-size:16px; font-weight:bold")  £#{licence.price}
+                            else
+                                td
+                                td(style="padding: 10px 50px; padding-left:10px;color:rgb(71, 85, 105); font-size:15px; line-height:20px")= licence.use
+                                td(style="padding: 10px 50px;text-align:center;font-size:15px;").territory= licence.territory
+                                td(style="padding: 10px 50px;text-align:center").nowrap
+                                    a(href="mailto:info@sync-audio.com" style="color:rgb(10, 168, 168); font-size:15px; font-weight:bold") Contact us
+            if showCartOptions
+                p(style="font-size:16px; color:gray; margin-top:20px")
+                    input(type="checkbox", name="agree", value="1", enabled)
+                    | 
+                    | I agree with the 
+                    | 
+                    a#tnclink(href="javascript:void(0)", target="_blank", style="color:rgb(10, 168, 168); font-size:17px") licence terms and conditions
+                p
+                    .cart-container
+                        input(type="submit", value="Add to Cart", class="disabled-btn", disabled)
+            else
+                div(style="margin-top:10px")
+                    a.cart-button.enabled(href="/music", style="white; font-size:17px;") Browse Music
