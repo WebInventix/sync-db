@@ -1,37 +1,37 @@
-//- .playlist-card-container
-//-     if playlists && playlists.length > 0
-//-         for playlist in playlists
-//-             a(href=`/playlist_tracks/${playlist.playlist_id}`).playlist-card
-//-                 .playlist-card-img
-//-                     img(src=`/images/playlists/${playlist.playlist_id}.jpg`, alt=playlist.name)
-//-                 .playlist-card-content
-//-                     h5= playlist.name
-//-     else
-//-         p No playlists available
+.playlist-card-container
+    if playlists && playlists.length > 0
+        for playlist in playlists
+            a(href=`/playlist_tracks/${playlist.playlist_id}`).playlist-card
+                .playlist-card-img
+                    img(src=`/images/playlists/${playlist.playlist_id}.jpg`, alt=playlist.name)
+                .playlist-card-content
+                    h5= playlist.name
+    else
+        p No playlists available
 
 block content
-  h1(style="margin-left:100px; margin-top:100px; margin-right:100px") Hear the Differnce
-  .playlist-card-container
-    each playlist in ['travel','film','be-inspired','celeberation','sports','cars','story','energizing']
-        .playlist-card
-            .playlist-card-img
-                img(src=`/images/playlists/${playlist}.jpg`, alt=`${playlist}`)
-            .playlist-card-content
-                h5
-                    case playlist
-                        when 'travel'
-                            | Travel
-                        when 'film'
-                            | Film TV
-                        when 'be-inspired'
-                            | Be Inspired
-                        when 'celeberation'
-                            | Celeberation
-                        when 'sports'
-                            | Sports
-                        when 'cars'
-                            | Cars & Motors
-                        when 'story'
-                            | Story Telling
-                        when 'energizing'
-                            | Energizing
+    h1(style="margin-left:100px; margin-top:100px; margin-right:100px") Hear the Differnce
+    .playlist-card-container
+        each playlist in ['travel','film','be-inspired','celeberation','sports','cars','story','energizing']
+            .playlist-card
+                .playlist-card-img
+                    img(src=`/images/playlists/${playlist}.jpg`, alt=`${playlist}`)
+                .playlist-card-content
+                    h5
+                        case playlist
+                            when 'travel'
+                                | Travel
+                            when 'film'
+                                | Film TV
+                            when 'be-inspired'
+                                | Be Inspired
+                            when 'celeberation'
+                                | Celeberation
+                            when 'sports'
+                                | Sports
+                            when 'cars'
+                                | Cars & Motors
+                            when 'story'
+                                | Story Telling
+                            when 'energizing'
+                                | Energizing

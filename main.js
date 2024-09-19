@@ -331,9 +331,11 @@ module.exports = function (config) {
   router.get("/about", function (_req, res) {
     res.render("about", { active: "/about" });
   });
+
   router.get("/contact", function (_req, res) {
     res.render("contact");
   });
+
   router.get("/site_use_disclaimer", function (_req, res) {
     res.render("site_use_disclaimer");
   });
