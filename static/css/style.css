@@ -710,14 +710,46 @@ ul.artists li div.image {
   overflow: hidden;
   padding-top: 100%;
   border-radius: 50%;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 4px 15px rgba(0, 0, 0, 0.4);
 }
-
-ul.artists li div.image:hover {
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+ul.artists li div.image a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  height: 100% !important;
 }
 
 ul.artists li div.image img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+
+ol li {
+  margin-bottom: 12pt;
+}
+
+div.artist {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+div.artist div.image {
+  position: relative;
+  margin-right: 24px;
+  margin-bottom: 24px;
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 5px 4px 15px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+div.artist div.image img {
   position: absolute;
   top: 0px;
   left: 0px;
