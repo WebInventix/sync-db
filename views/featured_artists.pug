@@ -11,16 +11,39 @@
 //-           a(href="/artist/" + artist.id)= artist.name
 //-           br
 //-           b(href="/artist/" + artist.id, style="color: #999999; font-size: 16px; font-weight: lighter;")= artist.job
+
+
+//- if artists && artists.length > 0
+//- 	h1(style="text-align: center; margin-top:100px") Featured Artists
+//- 	p(style="text-align: center; color: gray; margin-bottom: 80px; max-width: 700px; margin-left: auto; margin-right: auto; line-height:25px; font-size:18px") We’ve a dynamic group of individuals who are passionate about what music and are dedicated to producing the finest collection of music
+//- 	ul.artists
+//- 		each artist in artists
+//- 			li
+//- 				div.image
+//- 					a(href="/artist/"+artist.id)
+//- 						img(src="/images/artists/"+artist.id+".jpg")
+//- 				h4
+//- 					a(href="/artist/"+artist.id)= artist.name
+//- 					br
+//- 					b(href="/artist/"+artist.id, style="color:#999999;font-size:16px; font-weight:lighter;")= artist.job
+
+
 if artists && artists.length > 0
-	h1(style="text-align: center; margin-top:100px") Featured Artists
-	p(style="text-align: center; color: gray; margin-bottom: 80px; max-width: 700px; margin-left: auto; margin-right: auto; line-height:25px; font-size:18px") We’ve a dynamic group of individuals who are passionate about what music and are dedicated to producing the finest collection of music
-	ul.artists
-		each artist in artists
-			li
-				div.image
-					a(href="/artist/"+artist.id)
-						img(src="/images/artists/"+artist.id+".jpg")
-				h4
-					a(href="/artist/"+artist.id)= artist.name
-					br
-					b(href="/artist/"+artist.id, style="color:#999999;font-size:16px; font-weight:lighter;")= artist.job
+  h1(style="text-align: center; margin-top:100px") Featured Artists
+  p(style="text-align: center; color: gray; margin-bottom: 80px; max-width: 700px; margin-left: auto; margin-right: auto; line-height:25px; font-size:18px")    We ve a dynamic group of individuals who are passionate about music and are dedicated to producing the finest collection of music
+  
+  ul.artists
+    each artist, index in artists
+      li
+        div.image
+          a(href="/artist/"+artist.id)
+            if index === 0
+              img(src="/images/artists/15.jpg")
+            else if index === 1
+              img(src="/images/artists/35.jpg")
+            else if index === 2
+              img(src="/images/artists/25.jpg")
+        h4
+          a(href="/artist/"+artist.id)= artist.name
+          br
+          b(href="/artist/"+artist.id, style="color:#999999;font-size:16px; font-weight:lighter;")= artist.job
